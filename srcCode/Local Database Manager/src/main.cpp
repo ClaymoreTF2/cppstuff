@@ -91,6 +91,9 @@ namespace GUI
     SDL_Surface* 	surface = NULL;
     bool init()
     {
+        TTF_Font *font;
+        font = TTF_OpenFont("Test.ttf",30);
+        TTF_Init();
         SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO);
         SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER);
         SDL_EventState(SDL_KEYUP, SDL_IGNORE);
@@ -100,6 +103,9 @@ namespace GUI
                                   WIDTH, HEIGHT, SDL_WINDOW_RESIZABLE);
         renderer = SDL_CreateRenderer(window, -1, 0);
         texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
+        screen = SDL_SetVideoMode(WIDTH, HEIGHT, 32, SDL_SWSURFACE);
+        SDL_Color color = {0,0,0};
+        SDL_Event event;
         return true;
     }
     int showMenu(SDL_Surface* screen, TTF_Font* font) 
@@ -111,6 +117,12 @@ namespace GUI
         bool selected[NUMMENU] = {0, 0, 0, 0, 0, 0};
         SDL_Color color[6] = {{52, 25, 175}, {25, 80, 200}, {0, 100, 255},
                               {25, 52, 150}, {100, 25, 255}, {255, 150, 0}};
+        menus[0] = TTF_RenderText_Solid(font, labels[0], color[0] );
+        menus[1] = TTF_RenderText_Solid(font, labels[1], color[1] );
+        menus[2] = TTF_RenderText_Solid(font, labels[2], color[2] );
+        menus[3] = TTF_RenderText_Solid(font, labels[3], color[3] );
+        menus[4] = TTF_RenderText_Solid(font, labels[4], color[4] );
+        menus[5] = TTF_RenderText_Solid(font, labels[5], color[5] );
     }
 }
 
