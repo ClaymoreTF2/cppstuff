@@ -6,6 +6,8 @@
  * Fourth modification: 20-09-2016 */
 // SDL Includes for GUI:
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 // Standard C++ Includes:
 #include <fstream>	// for file streams: output and input
 #include <cstdio>	// for printf()
@@ -100,6 +102,16 @@ namespace GUI
         texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
         return true;
     }
+    int showMenu(SDL_Surface* screen, TTF_Font* font) 
+    {
+        int x, y;
+        const int NUMMENU = 6;
+        const char* labels[NUMMENU] = {"Master Login", "Master Password", "Save Data", "Load Data", "Edit Data", "Exit"};
+        SDL_Surface* menus[NUMMENU];
+        bool selected[NUMMENU] = {0, 0, 0, 0, 0, 0};
+        SDL_Color color[6] = {{52, 25, 175}, {25, 80, 200}, {0, 100, 255},
+                              {25, 52, 150}, {100, 25, 255}, {255, 150, 0}};
+    }
 }
 
 void LoadData()
@@ -124,6 +136,7 @@ void Selection()
     unsigned char s;
     Start:
         GUI::init();
+        GUI::showMenu();
         std::cin>>s;
         switch(s)
         {
