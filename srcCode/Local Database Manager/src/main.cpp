@@ -114,19 +114,86 @@ namespace GUI
     }
     int showMenu(SDL_Surface* screen, TTF_Font* font) 
     {
-        int x, y;
-        const int NUMMENU = 6;
+        Uint32 time; // we will store ticks in this.
+        int x, y;   // Basic position pointers on a 2D plane
+        const int NUMMENU = 6; // Number of menus
         const char* labels[NUMMENU] = {"Master Login", "Master Password", "Save Data", "Load Data", "Edit Data", "Exit"};
         SDL_Surface* menus[NUMMENU];
         bool selected[NUMMENU] = {0, 0, 0, 0, 0, 0};
         SDL_Color color[6] = {{52, 25, 175}, {25, 80, 200}, {0, 100, 255},
                               {25, 52, 150}, {100, 25, 255}, {255, 150, 0}};
+        // Menus = Labels with set color and fonts
         menus[0] = TTF_RenderText_Solid(font, labels[0], color[0] );
         menus[1] = TTF_RenderText_Solid(font, labels[1], color[1] );
         menus[2] = TTF_RenderText_Solid(font, labels[2], color[2] );
         menus[3] = TTF_RenderText_Solid(font, labels[3], color[3] );
         menus[4] = TTF_RenderText_Solid(font, labels[4], color[4] );
         menus[5] = TTF_RenderText_Solid(font, labels[5], color[5] );
+        SDL_Rect pos[NUMMENU];
+        /* This long data structure is going to setup basic "boxes" for our inputs
+         * I'm aware that there are more reliable and less prescribed methods to solve this
+         * but this works "well" */
+        pos[0].x = screen->clip_rect.w/2 - menus[0]->clip_rect.w/2;
+        pos[0].y = screen->clip_rect.h/2 - menus[0]->clip_rect.h;
+        pos[1].x = screen->clip_rect.w/2 - menus[1]->clip_rect.w/2;
+        pos[1].y = screen->clip_rect.h/2 - menus[1]->clip_rect.h;
+        pos[2].x = screen->clip_rect.w/2 - menus[2]->clip_rect.w/2;
+        pos[2].y = screen->clip_rect.h/2 - menus[2]->clip_rect.h;
+        pos[3].x = screen->clip_rect.w/2 - menus[3]->clip_rect.w/2;
+        pos[3].y = screen->clip_rect.h/2 - menus[3]->clip_rect.h;
+        pos[4].x = screen->clip_rect.w/2 - menus[4]->clip_rect.w/2;
+        pos[4].y = screen->clip_rect.h/2 - menus[4]->clip_rect.h;
+        pos[5].x = screen->clip_rect.w/2 - menus[5]->clip_rect.w/2;
+        pos[5].y = screen->clip_rect.h/2 - menus[5]->clip_rect.h;
+        SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
+
+        SDL_Event event;
+
+        while(true) {
+            time = SDL_GetTicks();
+            while(SDL_PollEvent(&event)) {
+                switch(event.type) {
+                    case SDL_Quit: 
+                        SDL_FreeSurface(menus[0]);
+                        SDL_FreeSurface(menus[1]);
+                        SDL_FreeSurface(menus[2]);
+                        SDL_FreeSurface(menus[3]);
+                        SDL_FreeSurface(menus[4]);
+                        SDL_FreeSurface(menus[5]);
+                        return 1;
+                    case SDL_MOUSE_MOTION:
+                        x = event.motion.x;
+                        y = event.motion.y;
+                        for(int i = 0; i<NUMMENU; i++) {
+                            if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h) {
+                                if(!selected[i]) {
+                                    selected[i] = 1;
+                                    SDL_FreeSurface(menus[i]);
+                                    menus[i] = TTF_RenderText_Solid(font,labels[i],color[1]);
+                                }
+                            } else {
+                                if(selected[i]) {
+                                    selected[i] = 0;
+                                    SDL_FreeSurface(menus[i]);
+                                    menus[i] = TTF_RenderText_Solid(font,labels[i],color[0]);
+                                }
+                            }
+                        }
+                        break;
+                    case SDL_MOUSEBUTTONDOWN:
+                        x = event.button.x;
+                        y = event.button.y;
+                        for(int i = 0; i < NUMMENU; i += 1) {
+                            if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h) {
+                                    SDL_FreeSurface(menus[0]);
+                                    SDL_FreeSurface(menus[1]);
+                                    return i;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
     }
 }
 
