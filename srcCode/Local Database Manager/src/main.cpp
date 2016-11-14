@@ -35,10 +35,14 @@ std::mt19937 rnd(time(0));
 // Memory block size in bytes
 const static unsigned char Block = 128;
 
-// These ANSI escape codes clear the whole screen and position the cursor at
-// row 1, column 1.
-#define CLEAR "\033[2J\033[1;1H"
-
+// Clear CMD macros for Windows and UNIX(GNU/Linux, etc)
+// TODO: Make it work
+#ifdef __unix__
+    #define CLEAR "\033[2J\033[1;1H"
+#elif defined _WIN64
+    #include <cstdlib>
+    #define CLEAR system("cls")
+#endif
 
 namespace Hash
 {
