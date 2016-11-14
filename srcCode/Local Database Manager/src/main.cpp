@@ -1,9 +1,5 @@
 /* User account manager + local database. Forever evolving project.
- * By Claymore @ https://steamcommunity.com/id/theclaymore
- * First modification: 	12-09-2016.
- * Second modification: 14-09-2016
- * Third modification: 	15-09-2016
- * Fourth modification: 20-09-2016 */
+ * By Claymore @ https://steamcommunity.com/id/theclaymore */
 // SDL Includes for GUI:
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
