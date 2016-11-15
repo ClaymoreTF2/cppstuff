@@ -84,6 +84,7 @@ void LoadData();	// Loading user data.
 namespace GUI
 {
     bool init();    // Initialize SDL.
+    bool runnning = true;
     void ShowGUI();	// Show the user interface.
     void Quit();	// Destroy SDL and quit the program.
     SDL_Window* 	window = NULL;
@@ -144,62 +145,66 @@ namespace GUI
         pos[5].y = screen->clip_rect.h/2 + menus[5]->clip_rect.h;
         SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
         SDL_Event event;
-        while(true) {
-            time = SDL_GetTicks();
-            while(SDL_PollEvent(&event)) {
-                switch(event.type) {
-                    case SDL_Quit: 
-                        SDL_FreeSurface(menus[0]);
-                        SDL_FreeSurface(menus[1]);
-                        SDL_FreeSurface(menus[2]);
-                        SDL_FreeSurface(menus[3]);
-                        SDL_FreeSurface(menus[4]);
-                        SDL_FreeSurface(menus[5]);
-                        return 1;
-                    case SDL_MOUSE_MOTION:
-                        x = event.motion.x;
-                        y = event.motion.y;
-                        for(int i = 0; i<NUMMENU; i++) {
-                            if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h) {
-                                if(!selected[i]) {
-                                    selected[i] = 1;
-                                    SDL_FreeSurface(menus[i]);
-                                    menus[i] = TTF_RenderText_Solid(font,labels[i],color[1]);
-                                }
-                            } else {
-                                if(selected[i]) {
-                                    selected[i] = 0;
-                                    SDL_FreeSurface(menus[i]);
-                                    menus[i] = TTF_RenderText_Solid(font,labels[i],color[0]);
-                                }
-                            }
-                        }
-                        break;
-                    case SDL_MOUSEBUTTONDOWN:
-                        x = event.button.x;
-                        y = event.button.y;
-                        for(int i = 0; i < NUMMENU; i += 1) {
-                            if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h) {
-                                    SDL_FreeSurface(menus[0]);
-                                    SDL_FreeSurface(menus[1]);
-                                    SDL_FreeSurface(menus[2]);
-                                    SDL_FreeSurface(menus[3]);
-                                    SDL_FreeSurface(menus[4]);
-                                    SDL_FreeSurface(menus[5]);
-                                    return i;
-                            }
-                        }
-                        break;
-                    case SDL_KEYDOWN: 
-                        if(event.key.keysym.sym == SDLK_ESCAPE) {
+        if(running) {
+            while(true) {
+                time = SDL_GetTicks();
+                while(SDL_PollEvent(&event)) {
+                    switch(event.type) {
+                        case SDL_Quit:
+                            running = false;
                             SDL_FreeSurface(menus[0]);
                             SDL_FreeSurface(menus[1]);
                             SDL_FreeSurface(menus[2]);
                             SDL_FreeSurface(menus[3]);
                             SDL_FreeSurface(menus[4]);
                             SDL_FreeSurface(menus[5]);
-                            return 0;
-                        }
+                            return 1;
+                        case SDL_MOUSE_MOTION:
+                            x = event.motion.x;
+                            y = event.motion.y;
+                            for(int i = 0; i<NUMMENU; i++) {
+                                if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h) {
+                                    if(!selected[i]) {
+                                        selected[i] = 1;
+                                        SDL_FreeSurface(menus[i]);
+                                        menus[i] = TTF_RenderText_Solid(font,labels[i],color[1]);
+                                    }
+                                } else {
+                                    if(selected[i]) {
+                                        selected[i] = 0;
+                                        SDL_FreeSurface(menus[i]);
+                                        menus[i] = TTF_RenderText_Solid(font,labels[i],color[0]);
+                                    }
+                                }
+                            }
+                            break;
+                        case SDL_MOUSEBUTTONDOWN:
+                            x = event.button.x;
+                            y = event.button.y;
+                            for(int i = 0; i < NUMMENU; i += 1) {
+                                if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h) {
+                                        SDL_FreeSurface(menus[0]);
+                                        SDL_FreeSurface(menus[1]);
+                                        SDL_FreeSurface(menus[2]);
+                                        SDL_FreeSurface(menus[3]);
+                                        SDL_FreeSurface(menus[4]);
+                                        SDL_FreeSurface(menus[5]);
+                                        return i;
+                                }
+                            }
+                            break;
+                        case SDL_KEYDOWN: 
+                            if(event.key.keysym.sym == SDLK_ESCAPE) {
+                                running = false;
+                                SDL_FreeSurface(menus[0]);
+                                SDL_FreeSurface(menus[1]);
+                                SDL_FreeSurface(menus[2]);
+                                SDL_FreeSurface(menus[3]);
+                                SDL_FreeSurface(menus[4]);
+                                SDL_FreeSurface(menus[5]);
+                                return 0;
+                            }
+                    }
                 }
             }
         }
