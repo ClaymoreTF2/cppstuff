@@ -18,9 +18,10 @@
 const unsigned MAX_USERS = 65536;
 const unsigned HASH_SIZE = 24;
 
-//Window Dimensions
+//Window Dimensions and FPS
 const unsigned WIDTH 	= 640;
 const unsigned HEIGHT 	= 480;
+const unsigned FPS      = 30;
 
 // Assigned automatically per user.
 static unsigned userID;
@@ -132,19 +133,17 @@ namespace GUI
         pos[0].x = screen->clip_rect.w/2 - menus[0]->clip_rect.w/2;
         pos[0].y = screen->clip_rect.h/2 - menus[0]->clip_rect.h;
         pos[1].x = screen->clip_rect.w/2 - menus[1]->clip_rect.w/2;
-        pos[1].y = screen->clip_rect.h/2 - menus[1]->clip_rect.h;
+        pos[1].y = screen->clip_rect.h/2 + menus[1]->clip_rect.h;
         pos[2].x = screen->clip_rect.w/2 - menus[2]->clip_rect.w/2;
         pos[2].y = screen->clip_rect.h/2 - menus[2]->clip_rect.h;
         pos[3].x = screen->clip_rect.w/2 - menus[3]->clip_rect.w/2;
-        pos[3].y = screen->clip_rect.h/2 - menus[3]->clip_rect.h;
+        pos[3].y = screen->clip_rect.h/2 + menus[3]->clip_rect.h;
         pos[4].x = screen->clip_rect.w/2 - menus[4]->clip_rect.w/2;
         pos[4].y = screen->clip_rect.h/2 - menus[4]->clip_rect.h;
         pos[5].x = screen->clip_rect.w/2 - menus[5]->clip_rect.w/2;
-        pos[5].y = screen->clip_rect.h/2 - menus[5]->clip_rect.h;
+        pos[5].y = screen->clip_rect.h/2 + menus[5]->clip_rect.h;
         SDL_FillRect(screen, &screen->clip_rect, SDL_MapRGB(screen->format, 0x00, 0x00, 0x00));
-
         SDL_Event event;
-
         while(true) {
             time = SDL_GetTicks();
             while(SDL_PollEvent(&event)) {
@@ -183,12 +182,33 @@ namespace GUI
                             if(x>=pos[i].x && x<=pos[i].x+pos[i].w && y>=pos[i].y && y<=pos[i].y+pos[i].h) {
                                     SDL_FreeSurface(menus[0]);
                                     SDL_FreeSurface(menus[1]);
+                                    SDL_FreeSurface(menus[2]);
+                                    SDL_FreeSurface(menus[3]);
+                                    SDL_FreeSurface(menus[4]);
+                                    SDL_FreeSurface(menus[5]);
                                     return i;
                             }
                         }
                         break;
+                    case SDL_KEYDOWN: 
+                        if(event.key.keysym.sym == SDLK_ESCAPE) {
+                            SDL_FreeSurface(menus[0]);
+                            SDL_FreeSurface(menus[1]);
+                            SDL_FreeSurface(menus[2]);
+                            SDL_FreeSurface(menus[3]);
+                            SDL_FreeSurface(menus[4]);
+                            SDL_FreeSurface(menus[5]);
+                            return 0;
+                        }
                 }
             }
+        }
+        for(int i = 0; i<NUMMENU; i++) {
+            SDL_BlitSurface(menus[i])
+        }
+        SDL_Flip(screen);
+        if(1000/30 > (SDL_GetTicks() - time)) {
+            SDL_Delay(1000/30 - (SDL_GetTicks() - time));
         }
     }
 }
