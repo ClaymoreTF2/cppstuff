@@ -226,13 +226,14 @@ void LoadData()
 void SaveData()
 {
     output.open("database.txt", std::ios::out | std::ios::binary);
-    /* char* login, password;
-    std::cin>>login>>password;
+    // char* login, password;
+    //std::cin>>login>>password;
     User uout;
-    uout.login      = login;
-    uout.password   = password;
-    UserID++;
-    output<<UserID<<" | "<<uout.login<<" | "<<uout.password<<'\n'; */
+    //uout.login      = login;
+    //uout.password   = password;
+    //UserID++;
+    //output<<UserID<<" | "<<uout.login<<" | "<<uout.password<<'\n'; */
+    output<<std::hex<<UserID<<uout.login<<uout.password<<endl;
 }
 
 void Selection()
