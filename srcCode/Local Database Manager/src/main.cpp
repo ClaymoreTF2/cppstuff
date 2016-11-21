@@ -274,6 +274,17 @@ void Selection()
 
 int main()
 {
+	while(running) {
+		start = SDL_ GetTicks();
+		// TODO: better event handling
+		while(SDL_PollEvent(&event)) {
+			switch(event.type) {
+				case SDL_QUIT:
+					running = false;
+					break;	
+			}
+		}
+	}
     Selection();
     return 0;
 }
